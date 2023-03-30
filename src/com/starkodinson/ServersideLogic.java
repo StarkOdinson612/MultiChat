@@ -10,10 +10,12 @@ public class ServersideLogic {
 
     private static Set<User> allUsers = new HashSet<>();
 
+    public static UserServer tempSingleServer;
+
     public static void main(String[] args) throws IOException {
 	// write your code here
         ServerSocket sSocket = new ServerSocket(49999);
-        UserServer tempSingleServer = new UserServer(1);
+        tempSingleServer = new UserServer(1);
 
 
     }
@@ -36,7 +38,7 @@ public class ServersideLogic {
                     User newUser = new User(s);
                     allUsers.add(newUser);
 
-                    Thread newUserRead = new Thread(new ReadSingleUserMessages(newUser));
+                    Thread newUserRead = new Thread(new ReadSingleUserMessages(newUser, ServersideLogic.tempSingleServer));
                     newUserRead.start();
                 } catch (IOException e) {
                     e.printStackTrace();

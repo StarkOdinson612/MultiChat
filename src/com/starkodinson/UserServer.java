@@ -1,10 +1,13 @@
 package com.starkodinson;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserServer {
     private Set<User> userSet;
@@ -12,14 +15,18 @@ public class UserServer {
     private String name;
     private User owner;
 
+    private int serverID;
+
     public Set<String> filteredWords;
 
-    public UserServer()
-    {
+    public UserServer(int id) throws FileNotFoundException {
         userSet = new HashSet<User>();
         bannedIP = new HashSet<>();
 
         filteredWords = new HashSet<>();
+
+        this.serverID = id;
+
     }
 
     public int addUser(User user) {
@@ -30,22 +37,29 @@ public class UserServer {
 
     public void addBannedWord(String word) { filteredWords.add(word); }
 
+    public boolean containsBannedWord(String message) { return filteredWords.stream().anyMatch(message::contains); }
+
     public void banUser(User user) { bannedIP.add(user.getUserIP()); }
 
-    public void broadcastMessage(String message) throws IOException {
+//    public void broadcastMessage(Message message) throws IOException {
+//        for (User user : userSet)
+//        {
+//            user.sendMessage(message);
+//        }
+//    }
+
+    public void broadcastString(String message) throws IOException
+    {
         for (User user : userSet)
         {
-            user.sendMessage(message);
+            user.sendString(message);
         }
     }
 
-
-
-    class ReadMessages implements Runnable
+    public boolean containsUser(User user)
     {
-        @Override
-        public void run() {
-
-        }
+        return userSet.stream().map(i -> i.getUserIP()).collect(Collectors.toSet()).contains(user.getUserIP());
     }
+
+    public int getServerID() { return this.serverID; }
 }

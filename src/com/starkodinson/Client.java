@@ -12,34 +12,45 @@ import java.net.Socket;
 public class Client {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setSize(1600,900);
-        frame.setLayout(new BorderLayout());
+        frame.setSize(1700,900);
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 
         JPanel rPanel = new JPanel();
+
+        JTextArea messageArea = new JTextArea();
+        messageArea.setEditable(false);
+        JScrollPane messagePane = new JScrollPane(messageArea);
+
+        messagePane.setPreferredSize(new Dimension((int) (frame.getWidth() * .71875), (int) (frame.getHeight() * .85)));
+
+        BoxLayout rLayout = new BoxLayout(rPanel, BoxLayout.Y_AXIS);
+
         JPanel lPanel = new JPanel();
 
-        lPanel.setPreferredSize(new Dimension(450,900));
-        rPanel.setPreferredSize(new Dimension(1150,900));
+        lPanel.setPreferredSize(new Dimension((int) (frame.getWidth() * 0.28125),(int) (frame.getHeight() * .95)));
+        rPanel.setPreferredSize(new Dimension(frame.getWidth() * 11 / 16, (int) (frame.getHeight() * .95)));
 
         JPanel inputPanel = new JPanel();
-        LayoutManager inputLayout = new GroupLayout(inputPanel);
+        GroupLayout inputLayout = new GroupLayout(inputPanel);
 
-        JTextField t = new JTextField();
-        t.setPreferredSize(new Dimension(1000,100));
-        JButton b = new JButton("Send");
-        b.setPreferredSize(new Dimension(150, 100));
-
-
+        JTextField textField = new JTextField();
+        textField.setPreferredSize(new Dimension(frame.getWidth() * 10 / 16,frame.getHeight() / 16));
+        JButton sendButton = new JButton("Send");
+        sendButton.setPreferredSize(new Dimension(frame.getWidth() * 3 / 32, frame.getHeight() / 16));
 
 
+        inputLayout.setHorizontalGroup(
+                inputLayout.createSequentialGroup()
+                .addComponent(textField)
+                .addComponent(sendButton)
+        );
 
-        inputPanel.add(t);
-        inputPanel.add(b);
 
+        rPanel.add(messagePane);
+        rPanel.add(inputPanel);
 
-        inputPanel.setLayout(inputLayout);
-
-        frame.add(inputPanel);
+        frame.add(lPanel);
+        frame.add(rPanel);
 
 
         frame.setVisible(true);

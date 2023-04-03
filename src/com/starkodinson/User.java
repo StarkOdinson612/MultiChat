@@ -2,7 +2,6 @@ package com.starkodinson;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.util.Objects;
 
 public class User {
@@ -22,7 +21,9 @@ public class User {
 
         userInputStream = new BufferedReader(new InputStreamReader(userSocket.getInputStream()));
 
-        this.username = userInputStream.readLine();
+        String message = userInputStream.readLine();
+        System.out.println(message);
+        this.username = message;
 
         userOutputStream = new PrintWriter(userSocket.getOutputStream(), true);
         userOOS = new ObjectOutputStream(userSocket.getOutputStream());

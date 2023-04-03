@@ -17,10 +17,11 @@ public class ServersideLogic {
         ServerSocket sSocket = new ServerSocket(49999);
         tempSingleServer = new UserServer(1);
 
-
+        Thread accept = new Thread(new AcceptThread(sSocket));
+        accept.start();
     }
 
-    class AcceptThread implements Runnable
+    static class AcceptThread implements Runnable
     {
         private ServerSocket serverSocket;
 
@@ -47,7 +48,7 @@ public class ServersideLogic {
         }
     }
 
-    class ReadSingleUserMessages implements Runnable
+    static class ReadSingleUserMessages implements Runnable
     {
         private User userToRead;
         private UserServer tempUS;
@@ -71,6 +72,7 @@ public class ServersideLogic {
                 try {
                     // Currently using crude string implementation, multi-server version will use Message Objects
                     String message = userToRead.readMessage();
+                    System.out.printf("%s: %s\n", userToRead.getUsername(), message);
                     tempUS.broadcastString(message);
                 } catch (IOException e) {
                     e.printStackTrace();

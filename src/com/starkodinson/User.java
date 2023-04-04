@@ -46,6 +46,8 @@ public class User {
 
     public boolean isConnected() { return !userSocket.isClosed(); }
 
+    public void closeSocket() throws IOException { userSocket.close(); }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

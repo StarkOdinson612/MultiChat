@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Client {
     private static javax.swing.JButton sendButton;
@@ -20,6 +23,7 @@ public class Client {
     private static javax.swing.JScrollPane memberScroll;
     private static javax.swing.JTextField inputField;
     private static JTextArea textArea;
+    private static JTextArea memberArea;
 
     public static void main(String[] args) throws IOException {
         FlatDarkLaf.setup();
@@ -34,7 +38,10 @@ public class Client {
         PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
 
         lPanel = new JPanel();
-        memberScroll = new JScrollPane();
+
+        memberArea = new JTextArea();
+        memberArea.setEditable(false);
+        memberScroll = new JScrollPane(memberArea);
         rPanel = new JPanel();
         ruPanel = new JPanel();
         textArea = new JTextArea();
@@ -44,7 +51,6 @@ public class Client {
         rlPanel = new JPanel();
         sendButton = new JButton();
         inputField = new JTextField();
-
 
 
 
@@ -144,8 +150,19 @@ public class Client {
         listenThread.start();
     }
 
+    static void updateMemberList(List<String> memberList)
+    {
+        memberArea.setText(memberList.stream().map(i -> i.replaceAll("[^a-zA-Z0-9]+", "")).collect(Collectors.joining("\n","","")));
+    }
+
     static void sendMessage(PrintWriter pw)
     {
+        if (textArea.getText().contains("Enter Username Now"))
+        {
+            textArea.setText("");
+        }
+
+        if (inputField.getText().equals("")) { return; }
         String currentMsg = inputField.getText();
         inputField.setText("");
         pw.println(currentMsg);
@@ -167,7 +184,19 @@ public class Client {
             {
                 try {
                     String message = br.readLine();
-                    textArea.append(message);
+                    if (message.contains("||USERLISTUPDATE||*(%#$#$:"))
+                    {
+                        if (message.length() < 26) { memberArea.setText(""); continue; }
+                        message = message.replace("||USERLISTUPDATE||*(%#$#$:","").replace("{","").replace("}","");
+                        List<String> memList = Arrays.asList(message.split(";"));
+                        updateMemberList(memList);
+
+                        continue;
+                    }
+                    else {
+                        System.out.println(message);
+                        textArea.append(message + "\n");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

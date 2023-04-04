@@ -1,12 +1,11 @@
 package com.starkodinson;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserServer {
@@ -33,6 +32,11 @@ public class UserServer {
         if (bannedIP.contains(user.getUserIP())) { return -1; }
         userSet.add(user);
         return 0;
+    }
+
+    public List<User> getUL()
+    {
+        return new ArrayList<>(userSet);
     }
 
     public void addBannedWord(String word) { filteredWords.add(word); }

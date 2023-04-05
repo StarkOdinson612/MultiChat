@@ -28,7 +28,7 @@ public class Client {
     public static void main(String[] args) throws IOException {
         FlatDarkLaf.setup();
         JFrame overallFrame = new JFrame();
-        overallFrame.setPreferredSize(new Dimension(1200,700));
+        overallFrame.setPreferredSize(new Dimension(1500,900));
         overallFrame.setMinimumSize(new Dimension(700,600));
 
         overallFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
